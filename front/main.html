@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - E-Learning</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <div class="viewport">
+    <div class="frame">
+      <!-- Left panel - Group 231 -->
+      <div class="left-panel">
+        <div class="left-panel-bg"></div>
+        <div class="left-panel-text">
+          <h1 class="left-panel-title">Lorem Ipsum is simply </h1>
+          <p class="left-panel-subtitle">Lorem Ipsum is simply </p>
+        </div>
+      </div>
+
+      <!-- Right panel - Group 230: Login form -->
+      <div class="right-panel">
+        <div class="form-header">
+          <p class="welcome-text">Welcome to lorem..!</p>
+          <div class="tabs">
+            <div class="tab-login">
+              <img src="images/login-tab.svg" alt="" class="tab-login-shape" aria-hidden="true">
+              <span class="tab-label tab-active">Login</span>
+            </div>
+            <a href="add.html" class="tab-label tab-register">Register</a>
+          </div>
+        </div>
+
+        <form id="login-form" class="form-body">
+          <p class="form-description">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+
+          <div class="field-group">
+            <label class="field-label">User name</label>
+            <div class="input-wrap">
+              <input type="text" name="userName" class="input" placeholder="Enter your User name" aria-label="User name">
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Password</label>
+            <div class="input-wrap">
+              <input type="password" name="password" class="input" placeholder="Enter your Password" aria-label="Password">
+              <button type="button" class="input-icon" aria-label="Toggle password visibility">
+                <img src="images/eye-icon.svg" alt="" width="18" height="18">
+              </button>
+            </div>
+          </div>
+
+        <div class="options-row">
+          <label class="checkbox-wrap">
+            <input type="checkbox" class="checkbox" aria-label="Remember me">
+            <span class="checkbox-label">Rememebr me</span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn-login">Login</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div id="msgbox" class="msgbox" aria-hidden="true">
+    <div class="msgbox-backdrop"></div>
+    <div class="msgbox-box">
+      <p class="msgbox-text">Sent!</p>
+      <button type="button" class="msgbox-ok">OK</button>
+    </div>
+  </div>
+  <script>
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var userName = (this.querySelector('input[name="userName"]') || {}).value || '';
+      var password = (this.querySelector('input[name="password"]') || {}).value || '';
+      fetch('/api/save-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userName: userName, password: password })
+      }).then(function() {
+        document.getElementById('msgbox').classList.add('is-open');
+        document.getElementById('msgbox').setAttribute('aria-hidden', 'false');
+      }).catch(function() {});
+    });
+    document.querySelector('.msgbox-ok').addEventListener('click', function() {
+      document.getElementById('msgbox').classList.remove('is-open');
+      document.getElementById('msgbox').setAttribute('aria-hidden', 'true');
+    });
+    document.querySelectorAll('.input-icon').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var wrap = this.closest('.input-wrap');
+        var input = wrap && wrap.querySelector('input[type="password"], input[type="text"]');
+        if (input) {
+          input.type = input.type === 'password' ? 'text' : 'password';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
